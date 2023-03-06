@@ -9,7 +9,7 @@ module.exports = async (ctx) => {
   }
 
   try {
-    const isNewUser = await newUser(id)
+    const isNewUser = await newUser(id, name)
     const message = isNewUser ? `Added ${name} to db!` : `${name} is already inside db!`
     return ctx.reply(message)
   } catch (e) {
