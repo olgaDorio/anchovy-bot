@@ -10,10 +10,8 @@ exports.newUser = (id) => {
         q.Collection('user'),
         { data: { userId: id } },
       )
-    ).then(ret => {
-      res(true)
-    }).catch(err => {
-      res(false)
-    });
+    )
+    .then(ret => { res(true) })
+    .catch(err => { res(false) });
   })
 }
