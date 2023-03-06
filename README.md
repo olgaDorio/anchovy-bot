@@ -14,7 +14,7 @@ Create a serverless Telegram Bot with a database to keep track of users using Ne
 
 On Telegram, create a new Telegram bot by talking to [@botfather](https://telegram.me/botfather) and thereafter get the token for the Telegram Bot.
 
-On FaunaDb site, create a collection with the name `user` (optionally, generate an index for the collection and specify the term for the **userId** to be unique). Head to the security section and generate a FaunaDB key for the collection.
+On FaunaDb site, create a collection with the name `user` (optionally, generate an index for the collection and specify the term for the **id** to be unique). Head to the security section and generate a FaunaDB key for the collection.
 
 ## Deploy to Netlify
 

@@ -1,5 +1,5 @@
 exports.getUser = info => {
-  const { id, is_bot: isBot, first_name: firstName, last_name: lastName } = info
-  const name = (firstName ? firstName : '' + ' ' + lastName ? lastName : '').trim()
-  return { id, isBot, name }
+  const { id, is_bot, first_name, last_name } = info
+  const name = [first_name, last_name].join(' ')
+  return { id, isBot: is_bot, name }
 }
