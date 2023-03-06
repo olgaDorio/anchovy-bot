@@ -5,6 +5,9 @@ const bot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN);
 
 bot.start(startAction)
 
+bot.command('oldschool', (ctx) => ctx.reply('Hello'))
+bot.command('modern', ({ reply }) => reply('Yo'))
+
 exports.handler = async event => {
   try {
     await bot.handleUpdate(JSON.parse(event.body));
