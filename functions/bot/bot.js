@@ -5,8 +5,21 @@ const bot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN);
 
 bot.start(startAction)
 
-bot.command('oldschool', (ctx) => ctx.reply('Hello'))
-bot.command('modern', ({ reply }) => reply('Yo'))
+bot.command('oldschool', (ctx) => ctx.reply('Hello'));
+bot.command('modern', (ctx) => ctx.reply('Yo'));
+
+
+let latest =''
+
+bot.command('poll', async (ctx) => {
+  return new Promise((resolve, reject) => {
+    ctx.replyWithPoll('my question', ['вариант 1', 'вариант 2', 'вариант 3', 'здесь нет нужного варианта, напишу руками'])
+      .then((response) => {latest = JSON.stringify(response); resolve();})
+      .catch(reject)
+  })
+})
+
+bot.command('poll.res', (ctx) => ctx.reply(latest));
 
 exports.handler = async event => {
   try {
