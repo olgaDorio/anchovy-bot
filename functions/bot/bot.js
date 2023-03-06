@@ -1,4 +1,4 @@
-const Telegraf = require('telegraf');
+const { Telegraf } = require('telegraf');
 const startAction = require('./actions/start')
 
 const bot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN);
@@ -15,5 +15,4 @@ exports.handler = async event => {
     console.log(e)
     return { statusCode: 400, body: 'This endpoint is meant for bot and telegram communication' };
   }
-
 }
