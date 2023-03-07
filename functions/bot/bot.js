@@ -19,7 +19,7 @@ bot.command('poll', async (ctx) => {
   })
 })
 
-bot.command('poll.res', (ctx) => ctx.reply(latest));
+bot.command('pollres', (ctx) => ctx.reply(latest));
 
 exports.handler = async event => {
   try {
