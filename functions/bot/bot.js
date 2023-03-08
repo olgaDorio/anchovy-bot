@@ -21,7 +21,7 @@ bot.command('askall', onAskAll);
 
 bot.on('message', onMessage);
 
-bot.launch();
+// bot.launch();
 
 exports.handler = async (event) => {
   try {
