@@ -1,35 +1,37 @@
 const { Telegraf } = require('telegraf');
-const startAction = require('./actions/start')
+const onStart = require('./handler/start');
+const onMessage = require('./handler/message');
+const onHistory = require('./handler/history');
+const onHelp = require('./handler/help');
+const onAsk = require('./handler/ask');
+const onHistoryAll = require('./handler/historyAll');
+const onAskAll = require('./handler/askAll');
 
 const bot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN);
 
-bot.start(startAction)
+bot.start(onStart);
 
-bot.command('oldschool', (ctx) => ctx.reply('Hello'));
-bot.command('modern', (ctx) => ctx.reply('Yo'));
+bot.command('help', onHelp);
 
+bot.command('history', onHistory);
+bot.command('ask', onAsk);
 
-let latest =''
+bot.command('historyall', onHistoryAll);
+bot.command('askall', onAskAll);
 
-bot.command('poll', async (ctx) => {
-  return new Promise((resolve, reject) => {
-    ctx.replyWithPoll('my question', ['вариант 1', 'вариант 2', 'вариант 3', 'здесь нет нужного варианта, напишу руками'])
-      .then((response) => {latest = JSON.stringify(response); resolve();})
-      .catch(reject)
-  })
-})
+bot.on('message', onMessage);
 
-bot.command('pollres', (ctx) => ctx.reply(latest));
+bot.launch();
 
-exports.handler = async event => {
+exports.handler = async (event) => {
   try {
     await bot.handleUpdate(JSON.parse(event.body));
     return { statusCode: 200, body: '' };
-  } catch (e) {
-    console.log(e)
+  } catch (error) {
+    console.error(error);
     return { statusCode: 400, body: 'This endpoint is meant for bot and telegram communication' };
   }
-}
+};
 
-process.once("SIGINT", () => bot.stop("SIGINT"));
-process.once("SIGTERM", () => bot.stop("SIGTERM"));
+process.once('SIGINT', () => bot.stop('SIGINT'));
+process.once('SIGTERM', () => bot.stop('SIGTERM'));

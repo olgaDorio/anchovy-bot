@@ -1,31 +1,53 @@
-const faunadb = require('faunadb')
+const faunadb = require('faunadb');
 
 const client = new faunadb.Client({ secret: process.env.FAUNA_SECRET_KEY });
 const q = faunadb.query;
 
-exports.newUser = (id, name) => {
-  return new Promise((res, rej) => {
-    client.query(
-      q.Create(
-        q.Collection('user'),
-        { data: { id, name } },
-      )
-    )
-    .then(ret => { res(true) })
-    .catch(err => { res(false) });
-  })
-}
+const create = ({ id, name }) => (
+  client.query(
+    q.Create(
+      q.Ref(q.Collection('users'), id),
+      { data: { id, name, responses: {} } },
+    ),
+  )
+);
 
-exports.readUsers = () => {
-  return new Promise((res, rej) => {
-    client.query(
-      q.Map(
-        q.Paginate(q.Documents(q.Collection("user"))),
-        q.Lambda(show => q.Get(show))
-      )
-    )
-    .then((ret) => ret.data.map(({data}) => data))
-    .then(res)
-    .catch((error) => {console.error(error); res([]);})
-  })
-}
+const appendResponse = ({ id, text, timestamp }) => (
+  client.query(
+    q.Update(
+      q.Ref(q.Collection('users'), id),
+      {
+        data: {
+          responses: {
+            [timestamp]: text,
+          },
+        },
+      },
+    ),
+  )
+);
+
+const getAll = () => (
+  client.query(
+    q.Map(
+      q.Paginate(q.Documents(q.Collection('users'))),
+      q.Lambda((show) => q.Get(show)),
+    ),
+  )
+    .then((ret) => ret.data.map(({ data }) => data))
+);
+
+const getById = (id) => (
+  client.query(
+    q.Get(
+      q.Ref(q.Collection('users'), id),
+    ),
+  )
+);
+
+module.exports = {
+  create,
+  appendResponse,
+  getAll,
+  getById,
+};
