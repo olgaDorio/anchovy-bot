@@ -42,8 +42,6 @@ const generateFailureResponse = (error) => [
     ].join('\n'),
     error,
   }),
-
-  { reply_markup: { remove_keyboard: true } },
 ];
 
 module.exports = {

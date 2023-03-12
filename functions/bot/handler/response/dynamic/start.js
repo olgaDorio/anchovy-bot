@@ -8,6 +8,4 @@ module.exports = (error) => [
     ].join('\n'),
     error,
   }),
-
-  { reply_markup: { remove_keyboard: true } },
 ];
