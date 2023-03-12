@@ -2,14 +2,11 @@
 
 const getUser = ({
   id, is_bot, first_name, last_name, username,
-}) => {
-  const fullName = (first_name && last_name) ? [first_name, last_name].join(' ') : '';
-  return {
-    id,
-    isBot: is_bot,
-    name: fullName || username,
-  };
-};
+}) => ({
+  id,
+  isBot: is_bot,
+  name: [first_name, last_name, username].filter(Boolean).join(' ') || id,
+});
 
 const getMessage = ({ from, date, text }) => ({
   id: from.id,
