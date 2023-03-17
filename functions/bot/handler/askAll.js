@@ -1,13 +1,23 @@
-const { getAll } = require('../components/fauna');
-const askResponse = require('./response/static/ask');
-const generateSuccessResponse = require('./response/dynamic/askAll');
+// const { getAll } = require('../components/fauna');
+// const askResponse = require('./response/static/ask');
+// const generateSuccessResponse = require('./response/dynamic/askAll');
 
-module.exports = (ctx) => getAll()
-  .then((users) => {
-    const recipients = users.map(({ id }) => id).filter((id) => id !== ctx.update.message.from.id);
+// module.exports = (ctx) => getAll()
+//   .then((users) => {
+//     const recipients = users.map(({ id }) => id).filter((id) => id !== ctx.update.message.from.id);
 
-    return Promise.all([
-      ctx.reply(...generateSuccessResponse(recipients)),
-      ...recipients.map((id) => ctx.telegram.sendMessage(id, ...askResponse)),
-    ]);
-  });
+//     return Promise.all([
+//       ctx.reply(...generateSuccessResponse(recipients)),
+//       ...recipients.map((id) => ctx.telegram.sendMessage(id, ...askResponse)),
+//     ]);
+//   });
+
+module.exports = (ctx) => ctx.reply('Ничего никому не отправлю, жду выходных, пока мама меня полечит')
+  // .then((users) => {
+  //   const recipients = users.map(({ id }) => id).filter((id) => id !== ctx.update.message.from.id);
+
+  //   return Promise.all([
+  //     ctx.reply(...generateSuccessResponse(recipients)),
+  //     ...recipients.map((id) => ctx.telegram.sendMessage(id, ...askResponse)),
+  //   ]);
+  // });
