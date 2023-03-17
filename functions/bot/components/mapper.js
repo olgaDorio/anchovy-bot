@@ -16,5 +16,5 @@ const getMessage = ({ from, date, text }) => ({
 
 module.exports = {
   getUser,
-  getMessage,
+  getMessage
 };
