@@ -1,23 +1,35 @@
-// const { getAll } = require('../components/fauna');
-// const askResponse = require('./response/static/ask');
-// const generateSuccessResponse = require('./response/dynamic/askAll');
+const { getAll } = require('../components/fauna');
+const askResponse = require('./response/static/ask');
+const askAllResponse = require('./response/static/askAll');
+const {
+  generateSuccessResponse,
+  generateFailureResponse,
+} = require('./response/dynamic/askAll');
 
-// module.exports = (ctx) => getAll()
-//   .then((users) => {
-//     const recipients = users.map(({ id }) => id).filter((id) => id !== ctx.update.message.from.id);
+const notifyOthers = (ctx) => {
+  getAll()
+    .then((users) => {
+      const initiatorId = ctx.update.message.from.id;
 
-//     return Promise.all([
-//       ctx.reply(...generateSuccessResponse(recipients)),
-//       ...recipients.map((id) => ctx.telegram.sendMessage(id, ...askResponse)),
-//     ]);
-//   });
+      users.forEach((user) => {
+        if (user.id === initiatorId) {
+          return;
+        }
 
-module.exports = (ctx) => ctx.reply('Ничего никому не отправлю, жду выходных, пока мама меня полечит')
-  // .then((users) => {
-  //   const recipients = users.map(({ id }) => id).filter((id) => id !== ctx.update.message.from.id);
+        ctx.telegram.sendMessage(user.id, ...askResponse)
+          .then(() => (
+            ctx.telegram.sendMessage(initiatorId, ...generateSuccessResponse(user))
+          ))
+          .catch((error) => (
+            ctx.telegram.sendMessage(initiatorId, ...generateFailureResponse(user, error))
+          ))
+          .catch(console.error);
+      });
+    })
+    .catch(console.error);
+};
 
-  //   return Promise.all([
-  //     ctx.reply(...generateSuccessResponse(recipients)),
-  //     ...recipients.map((id) => ctx.telegram.sendMessage(id, ...askResponse)),
-  //   ]);
-  // });
+module.exports = (ctx) => {
+  notifyOthers(ctx);
+  return ctx.reply(...askAllResponse);
+};
