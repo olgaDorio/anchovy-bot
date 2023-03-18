@@ -15,12 +15,16 @@ const generateSuccessResponse = (data) => {
     }, {});
 
   const formatted = Object.keys(groupped)
-    .reduce((acc, key) => {
-      acc.push(`\n<u>${key}</u>\n`);
+    .reduce((acc, key, index, array) => {
+      if (index >= array.length - 2) {
+        acc.push(`\n<u>${key}</u>\n`);
 
-      groupped[key].forEach(({ time, response }) => {
-        acc.push(`${time} ${response}`);
-      });
+        groupped[key].forEach(({ time, response }) => {
+          acc.push(`${time} ${response}`);
+        });
+      } else {
+        acc.push(`\n<u>${key}</u>. Скрыто: ${groupped[key].length}\n`);
+      }
 
       return acc;
     }, [])
